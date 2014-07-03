@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <script src="Satsuma.js"></script>
+    </head>
+    <body>
+
+        <div id="container" style="border: 1px dotted lightskyblue; overflow: hidden">
+            <div id="dragthing" style="border: 1px dashed darkseagreen">
+                <span>Some text</span> and an img<img src="https://www.google.de/images/srpr/logo11w.png">
+            </div>
+
+        </div>
+
+
+        <script type="text/javascript">
+            var satsuma = new Satsuma($('#container'),$('#dragthing'));
+        </script>
+    </body>
+</html>
