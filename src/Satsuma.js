@@ -34,8 +34,8 @@ export class Satsuma {
             this.drag(ev);
             ev.preventDefault();
             this.translator.start({
-                screenX: ev.screenX,
-                screenY: ev.screenY,
+                clientX: ev.clientX,
+                clientY: ev.clientY,
             });
         });
 
@@ -44,22 +44,22 @@ export class Satsuma {
             this.drag(ev);
 
             // keep initial pos of first touch for possible pinch calculation
-            this.touchX = ev.touches[0].screenX;
-            this.touchY = ev.touches[0].screenX;
+            this.touchX = ev.touches[0].clientX;
+            this.touchY = ev.touches[0].clientY;
 
             // if this is the start of the second touch, add second pos
             if (ev.touches.length > 1) {
                 this.translator.reset();
                 // calculate initial touch distance
                 this.distance = Math.sqrt(
-                    Math.pow(this.touchX - ev.touches[1].screenX, 2) +
-                    Math.pow(this.touchY - ev.touches[1].screenY, 2));
+                    Math.pow(this.touchX - ev.touches[1].clientX, 2) +
+                    Math.pow(this.touchY - ev.touches[1].clientY, 2));
             }
 
 
             this.translator.start({
-                screenX: ev.touches[0].screenX,
-                screenY: ev.touches[0].screenY,
+                clientX: ev.touches[0].clientX,
+                clientY: ev.touches[0].clientY,
             });
         });
 
@@ -81,8 +81,8 @@ export class Satsuma {
 
             // this is a single touch pan
             this.translator.update(new TranslatorUpdate({
-                screenX: ev.touches[0].screenX,
-                screenY: ev.touches[0].screenY,
+                clientX: ev.touches[0].clientX,
+                clientY: ev.touches[0].clientY,
             }));
             this.drag(ev);
         });
@@ -90,8 +90,8 @@ export class Satsuma {
         document.addEventListener('mousemove', (ev) => {
             if (!this.active) return;
             this.translator.update(new TranslatorUpdate({
-                screenX: ev.screenX,
-                screenY: ev.screenY,
+                clientX: ev.clientX,
+                clientY: ev.clientY,
             }));
             this.drag(ev);
         });
@@ -110,10 +110,15 @@ export class Satsuma {
         });
 
         this.container.addEventListener('wheel', (ev) => {
-            this.translator.start(new TranslatorUpdate({}));
+            this.translator.start(new TranslatorUpdate({
+                clientX: ev.clientX,
+                clientY: ev.clientY,
+            }));
             this.translator.update(new TranslatorUpdate({
                 // Normalize different Browser deltas
-                scale: 1 - 1 / 10 * (ev.deltaY / Math.abs(ev.deltaY)),
+                scale: 1 - 1 / 20 * (ev.deltaY / Math.abs(ev.deltaY)),
+                clientX: ev.clientX,
+                clientY: ev.clientY,
             }));
             this.translator.done();
             this.drag(ev);
@@ -126,8 +131,8 @@ export class Satsuma {
 
     calcTouchDistance(touch, touch2) {
         return Math.sqrt(
-            Math.pow(touch.screenX - touch2.screenY, 2) +
-            Math.pow(touch.screenY - touch2.screenY, 2),
+            Math.pow(touch.clientX - touch2.clientY, 2) +
+            Math.pow(touch.clientY - touch2.clientY, 2),
         );
     }
 
